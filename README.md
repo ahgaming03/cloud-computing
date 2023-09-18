@@ -1,2 +1,6 @@
 # cloud-computing
-learn could computing
+## services
+* DB: mongoose
+* hbs
+* express
+
