@@ -1,0 +1,22 @@
+<html lang="en">
+{{> head}}
+
+<body>
+    {{>nav}}
+
+    <div class="create-book content">
+        <form action="/books" method="POST">
+            <label for="name">Book name: </label>
+            <input type="text" name="name" id="name" required>
+            <label for="author">Author: </label>
+            <input type="text" name="author" id="author" required>
+            <label for="price">Price: </label>
+            <input type="number" name="price" id="price" step="0.1" value="0" required>
+            <button>Submit</button>
+        </form>
+    </div>
+
+    {{> footer}}
+</body>
+
+</html>

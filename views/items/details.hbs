@@ -1,0 +1,51 @@
+<html lang="en">
+{{>head}}
+
+<head>
+    <style>
+        a {
+            margin-top: 5px;
+        }
+
+        .delete {
+            position: relative;
+            border-radius: 20%;
+            padding: 2px;
+            background-color: rgb(0, 247, 255);
+        }
+
+        .delete:hover {
+            background-color: rgb(25, 0, 255);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0px 0px 5px 0px rgb(0, 0, 0);
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Item</h1>
+    <div>Name: {{item.name}}</div>
+    <br>
+    <a class="delete" data-doc="{{this._id}}">Delete</a>
+    <a href="/">Back</a>
+
+    <script src="script.js"></script>
+
+    <script>
+        const trash = document.querySelectorAll('a.delete');
+
+        item.addEventListener('click', (e) => {
+            const endpoint = '/items/' + ${ trash.dataset.doc };
+
+            fetch(endpoint, {
+                method: 'DELETE'
+            })
+                .then((response) => response.json())
+                .then((data) => window.location.href = data.redirect)
+                .catch((err) => console.log(err));
+        })
+    </script>
+</body>
+
+</html>

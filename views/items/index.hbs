@@ -1,0 +1,29 @@
+<html lang="en">
+{{> head}}
+
+<body>
+    <h1>Items</h1>
+    <form action="/items" method="POST">
+        <input type="text" name="name" placeholder="Name" required />
+        <button type="submit">Add</button>
+    </form>
+    {{#if items.length}}
+        <ol type="1">
+            {{#each items}}
+            <li>
+                
+                <a href="/items/{{this._id}}">{{this.name}}</a>
+             
+            </li>
+            {{/each}}
+        </ol>
+    {{else}}
+    <p>No items</p>
+    {{/if}}
+
+
+    
+
+</body>
+
+</html>

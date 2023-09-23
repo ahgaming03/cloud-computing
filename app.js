@@ -1,59 +1,67 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const path = require('path');
-const hbs = require('hbs');
+const express = require("express");
+const mongoose = require("mongoose");
+const hbs = require("hbs");
+const morgan = require("morgan");
 
 const app = express();
-
-// Connect to MongoDB
-const username = 'root';
-const password = 'Abcd1234';
-const dbName = 'mvc-example';
-const dbHost = 'localhost';
-
-const url = 'mongodb+srv://' + username + ':' + password + '@' + dbName + '.elbom2r.mongodb.net/?retryWrites=true&w=majority';
-
-async function connect() {
-    try {
-        await mongoose.connect(url, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log('Connected to MongoDB');
-    } catch (err) {
-        console.error('Error connecting to MongoDB', err);
-    }
-}
-
-connect();
-
-// mongoose.connect(`mongodb://${username}:${password}@${dbHost}/${dbName}`, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// })
-//     .then(() => {
-//         console.log('Connected to MongoDB');
-//     })
-//     .catch(err => {
-//         console.error('Error connecting to MongoDB', err);
-//     });
-
-// Set view engine
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Set static folder
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Body parser middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-// Routes
-app.use('/', require('./routes/index'));
-
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+// Import routes
+const itemRoutes = require("./routes/itemRoutes");
+const bookRoutes = require("./routes/bookRoutes");
 
-module.exports = app;  // for testing
+// Connect to MongoDB
+const username = "root";
+const password = "Abcd1234";
+const dbname = "Library2";
+
+const url =
+    "mongodb+srv://" +
+    username +
+    ":" +
+    password +
+    "@mvc-example.elbom2r.mongodb.net/" +
+    dbname +
+    "?retryWrites=true&w=majority";
+
+mongoose
+    .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(
+        (result) => console.log("Connected to MongoDB"),
+        app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+    )
+    .catch((err) => console.error("Error connecting to MongoDB", err));
+
+// Set view engine
+app.set("view engine", "hbs");
+
+// Register partials
+hbs.registerPartials(__dirname + "/views/partials");
+
+// Set middleware & static file
+app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+
+// Routes
+app.get("/", (req, res) => {
+    res.redirect("/books");
+});
+
+// about page
+app.get("/about", (req, res) => {
+    res.render("about", { title: "About" });
+});
+
+// item routes
+app.use("/items", itemRoutes);
+
+// book routes
+app.use("/books", bookRoutes);
+
+// 404 page
+app.use((req, res) => {
+    res.status(404).render("404", { title: "404" });
+});
+
+module.exports = app; // for testing

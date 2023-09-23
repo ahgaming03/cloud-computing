@@ -1,0 +1,31 @@
+<html lang="en">
+
+{{> head}}
+
+<body>
+    {{>nav}}
+    <div class="books content">
+        <h2>All books</h2>
+
+        {{#if books.length}}
+        {{#each books}}
+        <div class="card">
+            <a href="/books/{{this._id}}" class="single">
+                <h3 class="title">{{this.name}}</h3>
+                <p class="author">{{this.author}}</p>
+                <p class="price">$ {{this.price}}</p>
+            </a>
+        </div>
+        {{/each}}
+        {{else}}
+        <p>There are no books to display ...</p>
+        {{/if}}
+
+    </div>
+
+
+    {{> footer}}
+</body>
+
+
+</html>

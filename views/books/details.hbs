@@ -1,0 +1,42 @@
+<html lang="en">
+{{> head}}
+
+<body>
+    {{>nav}}
+
+    <div class="details content">
+        <h2>{{book.name}}</h2>
+        <div class="content">
+            <p>{{book.author}}</p>
+            <p>$ {{book.price}}</p>
+        </div>
+        <a class="delete" data-del="{{book._id}}">delete</a>
+    </div>
+
+    {{>footer}}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const trashcans = document.querySelectorAll('a.delete');
+
+            trashcans.forEach(trashcan => {
+                trashcan.addEventListener('click', (e) => {
+                    e.preventDefault();
+
+                    const endpoint = `/books/${trashcan.dataset.del}`;
+                    fetch(endpoint, {
+                        method: 'DELETE'
+                    })
+                        .then((response) => response.json())
+                        .then((data) => {
+                            window.location.href = '/books';
+                        })
+                        .catch(err => console.log(err));
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
